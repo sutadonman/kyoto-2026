@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#3C3C63">
+<title>持ち物 ｜ 響け！ユーフォニアム 聖地巡礼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --washi:#F6F1E6; --washi-2:#FBF8F0; --ink:#2A2622; --ink-soft:#6F665A;
+    --brass:#B5872E; --brass-deep:#8C641B; --brass-glow:#E4BC66;
+    --tea:#4E6A52; --dusk:#3C3C63; --rule:#E3D8C1; --rule-soft:#EDE5D4;
+    --alert:#A6402C; --done:#4E6A52;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--washi);color:var(--ink);
+    font-family:"Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 18px 96px;}
+
+  .nav{margin:0 -18px;padding:0 18px;background:#23223B;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav-i{position:relative;flex:none;text-decoration:none;padding:13px 16px 11px;font-weight:700;font-size:.84rem;
+    letter-spacing:.06em;color:rgba(244,236,220,.62);white-space:nowrap;border-bottom:2px solid transparent;}
+  .nav-i:hover,.nav-i:focus-visible{color:#F4ECDC;}
+  .nav-i[aria-current="page"]{color:var(--brass-glow);border-bottom-color:var(--brass);}
+
+  .hero{position:relative;margin:0 -18px;padding:40px 24px 24px;overflow:hidden;color:#F4ECDC;
+    background:radial-gradient(120% 90% at 80% -10%, rgba(228,188,102,.30), transparent 55%),
+      linear-gradient(160deg,#23223B 0%,#3C3C63 42%,#7C4E47 78%,#B5872E 130%);}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;
+    background:repeating-linear-gradient(to bottom,rgba(244,236,220,.28) 0,rgba(244,236,220,.28) 1px,transparent 1px,transparent 11px);
+    opacity:.5;pointer-events:none;}
+  .kicker{font-family:"Barlow Condensed",sans-serif;letter-spacing:.42em;text-transform:uppercase;
+    font-weight:600;font-size:.74rem;color:var(--brass-glow);margin:0 0 12px;}
+  .hero h1{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.6rem,5.6vw,2.2rem);line-height:1.25;margin:0;}
+  .hero p{margin:12px 0 0;font-size:.9rem;color:#E7DCC8;position:relative;z-index:1;}
+
+  .bar{position:sticky;top:0;z-index:20;margin:0 -18px;padding:10px 18px 11px;
+    background:rgba(246,241,230,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  .bar-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .who{display:flex;border:1px solid var(--brass);border-radius:20px;overflow:hidden;flex:none;}
+  .who button{appearance:none;border:none;background:transparent;font:inherit;font-size:.82rem;font-weight:700;
+    color:var(--brass-deep);padding:5px 15px;cursor:pointer;line-height:1.4;}
+  .who button[aria-pressed="true"]{background:var(--brass);color:#fff;}
+  .total{display:flex;align-items:center;gap:9px;margin-top:9px;font-size:.78rem;color:var(--ink-soft);}
+  .meter{flex:1;height:6px;border-radius:4px;background:var(--rule-soft);overflow:hidden;min-width:80px;}
+  .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--brass),var(--brass-glow));width:0;transition:width .2s;}
+  .total b{font-family:"Barlow Condensed",sans-serif;font-size:.96rem;color:var(--brass-deep);letter-spacing:.04em;}
+  .linkish{appearance:none;border:none;background:none;font:inherit;font-size:.74rem;
+    color:var(--ink-soft);text-decoration:underline;cursor:pointer;padding:0;flex:none;}
+
+  h2{font-family:"Noto Serif JP",serif;font-weight:700;font-size:1.05rem;margin:30px 0 0;
+    display:flex;align-items:center;gap:9px;padding-bottom:8px;border-bottom:2px solid var(--brass);}
+  h2 .n{margin-left:auto;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:.92rem;
+    color:var(--brass-deep);letter-spacing:.04em;}
+
+  ul.items{list-style:none;margin:0;padding:0;}
+  li.item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule-soft);}
+  li.item:last-child{border-bottom:none;}
+  li.item.done{opacity:.55;}
+  li.item.mine-only{background:rgba(60,60,99,.04);}
+  .check{flex:none;display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
+    border:1px solid var(--rule);background:var(--washi-2);border-radius:18px;padding:5px 12px 5px 9px;
+    font-size:.76rem;font-weight:700;color:var(--ink-soft);}
+  .check input{width:18px;height:18px;accent-color:var(--brass);margin:0;}
+  .check.on{border-color:var(--done);background:rgba(78,106,82,.1);color:var(--done);}
+  .body{flex:1;min-width:0;}
+  .nm{font-weight:700;font-size:1.02rem;line-height:1.45;}
+  li.item.done .nm{text-decoration:line-through;text-decoration-color:var(--rule);}
+  /* 名前が入るので text-transform は掛けない（Yoshi が YOSHI になってしまう） */
+  .chip{display:inline-block;margin-left:7px;vertical-align:middle;font-weight:600;font-size:.7rem;
+    letter-spacing:.04em;border-radius:3px;padding:1px 7px;
+    color:var(--dusk);background:rgba(60,60,99,.1);border:1px solid rgba(60,60,99,.28);}
+  .note{font-size:.82rem;color:var(--ink-soft);margin-top:1px;}
+
+  .panel{margin-top:34px;background:var(--washi-2);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;}
+  .panel p{margin:0;font-size:.86rem;color:var(--ink-soft);}
+  .panel b{color:var(--brass-deep);}
+  footer{margin-top:34px;text-align:center;font-size:.76rem;color:var(--ink-soft);}
+  #boot{margin:28px 0;padding:16px 18px;border:1px solid var(--rule);border-radius:12px;background:var(--washi-2);font-size:.88rem;}
+  @media (max-width:430px){.hero{padding:32px 18px 20px;}}
+  @media print{.nav,.bar{display:none;}body{background:#fff;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav" aria-label="ページ切り替え">
+    <a class="nav-i" href="./index.html">巡礼コース</a>
+    <a class="nav-i" href="./mochimono.html" aria-current="page">持ち物</a>
+    <a class="nav-i" href="./seisan.html">精算</a>
+  </nav>
+
+  <header class="hero">
+    <p class="kicker">Packing</p>
+    <h1>持ち物</h1>
+    <p>チェックはこの端末に残ります。人ごとに別なので、二人が同じ画面を見ても混ざりません。</p>
+  </header>
+
+  <div id="boot">
+    <b>読み込み中…</b> このまま変わらない場合は <code>file://</code> で開いています。
+  </div>
+
+  <main id="app" hidden></main>
+
+  <div class="panel">
+    <p><b>8月末の京都・宇治は35℃前後。</b>初日の宇治歩きと3日目の哲学の道は炎天下です。
+    大吉山の展望台は夜に登るので、足元用のライト（スマホでも可）があると安心です。</p>
+  </div>
+
+  <footer><p>響け！ユーフォニアム 聖地巡礼 ／ 京都・宇治 2026.8.28–30</p></footer>
+</div>
+
+<script type="module">
+import { TRIP } from './spots.js';
+
+/* ============================================================
+   持ち物リスト。ここを直せば表示が追従する。
+     name : 品目
+     who  : その人だけの持ち物。省略すると二人とも
+     note : ひとこと（省略可）
+   ============================================================ */
+const ITEMS = [
+  { group: '暑さ・日差し対策', list: [
+    { name: '日焼け止め', note: '宇治は日陰が少ない。塗り直しぶんも' },
+    { name: '帽子' },
+    { name: 'タオル' },
+  ]},
+  { group: '衣類・荷物', list: [
+    { name: '着替え', note: '2泊3日' },
+    { name: 'バックパック' },
+  ]},
+  { group: '宿', list: [
+    { name: '耳栓' },
+  ]},
+  { group: '撮影', list: [
+    { name: 'ズームレンズ', who: 'Yoshi' },
+  ]},
+];
+
+const LS = { checks: 'kyoto2026.packing', me: 'kyoto2026.me' };
+const MEMBERS = TRIP.members;
+const read = (k, fb) => { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch { return fb; } };
+const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
+  (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// index.html / seisan.html と同じキーを共有する（保存形式も JSON で揃える）
+let me = MEMBERS.includes(read(LS.me, null)) ? read(LS.me, null) : MEMBERS[0];
+let checks = read(LS.checks, {});   // { 品目名: { Yoshi: true, Oka: true } }
+
+const isOn = (name, who) => Boolean(checks[name] && checks[name][who]);
+/** 自分が持つ物か（who 指定が無ければ二人とも） */
+const forMe = (it) => !it.who || it.who === me;
+
+function setCheck(name, on) {
+  const row = checks[name] || (checks[name] = {});
+  row[me] = on || undefined;
+  if (!row[me]) delete row[me];
+  write(LS.checks, checks);
+}
+
+const app = document.getElementById('app');
+
+app.innerHTML = `
+  <div class="bar">
+    <div class="bar-row">
+      <div class="who" role="group" aria-label="持ち物を確認する人">
+        ${MEMBERS.map((m) => `<button type="button" data-me="${esc(m)}" aria-pressed="false">${esc(m)}</button>`).join('')}
+      </div>
+      <button type="button" class="linkish" data-reset>チェックをすべて解除</button>
+    </div>
+    <div class="total">
+      <span id="total-label">–</span>
+      <span class="meter"><i id="total-bar"></i></span>
+      <b id="total-pct">0%</b>
+    </div>
+  </div>
+  ${ITEMS.map((g) => `
+    <h2>${esc(g.group)}<span class="n" data-gn="${esc(g.group)}"></span></h2>
+    <ul class="items">
+      ${g.list.map((it) => `
+        <li class="item" data-name="${esc(it.name)}" ${it.who ? `data-who="${esc(it.who)}"` : ''}>
+          <label class="check">
+            <input type="checkbox" aria-label="${esc(it.name)} を用意した">
+          </label>
+          <div class="body">
+            <div class="nm">${esc(it.name)}${it.who ? `<span class="chip">${esc(it.who)}のみ</span>` : ''}</div>
+            ${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}
+          </div>
+        </li>`).join('')}
+    </ul>`).join('')}
+`;
+app.hidden = false;
+document.getElementById('boot').remove();
+
+function render() {
+  let all = 0, hit = 0;
+  ITEMS.forEach((g) => {
+    let gAll = 0, gHit = 0;
+    g.list.forEach((it) => {
+      const li = app.querySelector(`li.item[data-name="${CSS.escape(it.name)}"]`);
+      const mine = forMe(it);
+      const on = isOn(it.name, me);
+      const box = li.querySelector('input');
+      box.checked = on;
+      box.disabled = !mine;
+      li.querySelector('.check').classList.toggle('on', on && mine);
+      li.classList.toggle('done', on && mine);
+      li.classList.toggle('mine-only', Boolean(it.who));
+      if (mine) { gAll++; if (on) gHit++; }
+    });
+    all += gAll; hit += gHit;
+    app.querySelector(`[data-gn="${CSS.escape(g.group)}"]`).textContent = `${gHit}/${gAll}`;
+  });
+  const pct = all ? Math.round((hit / all) * 100) : 0;
+  document.getElementById('total-label').textContent = `${me} の持ち物　${hit} / ${all}`;
+  document.getElementById('total-bar').style.width = pct + '%';
+  document.getElementById('total-pct').textContent = pct + '%';
+  app.querySelectorAll('[data-me]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.me === me)));
+}
+render();
+
+app.addEventListener('change', (e) => {
+  const box = e.target.closest('.check input');
+  if (!box) return;
+  setCheck(box.closest('li.item').dataset.name, box.checked);
+  render();
+});
+
+app.addEventListener('click', (e) => {
+  const who = e.target.closest('[data-me]');
+  if (who) { me = who.dataset.me; write(LS.me, me); render(); return; }
+  if (e.target.closest('[data-reset]')) {
+    if (!confirm(`${me} の持ち物チェックをすべて解除します。よろしいですか？`)) return;
+    Object.keys(checks).forEach((k) => { if (checks[k]) delete checks[k][me]; });
+    write(LS.checks, checks);
+    render();
+  }
+});
+</script>
+</body>
+</html>

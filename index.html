@@ -64,6 +64,14 @@
   .chip-btn{appearance:none;font:inherit;font-size:.76rem;font-weight:600;cursor:pointer;
     border:1px solid var(--rule);background:var(--washi-2);color:var(--ink-soft);border-radius:16px;padding:3px 11px;}
   .chip-btn[aria-pressed="true"]{border-color:var(--brass);background:rgba(181,135,46,.14);color:var(--brass-deep);}
+  /* 表示の3択（すべて／未訪問／訪問済）。種別の絞り込みと区別するため囲む */
+  .seg{display:inline-flex;gap:0;border:1px solid var(--rule);border-radius:16px;overflow:hidden;flex:none;}
+  .seg .chip-btn{border:none;border-radius:0;background:transparent;padding:3px 10px;}
+  .seg .chip-btn+.chip-btn{border-left:1px solid var(--rule);}
+  .seg .chip-btn[aria-pressed="true"]{background:var(--dusk);color:#fff;border-color:var(--dusk);}
+  .empty{display:none;margin:14px 0 0;padding:12px 14px;border:1px dashed var(--rule);border-radius:10px;
+    background:var(--washi-2);font-size:.85rem;color:var(--ink-soft);}
+  .empty.on{display:block;}
   .total{display:flex;align-items:center;gap:9px;margin-top:9px;font-size:.78rem;color:var(--ink-soft);}
   .meter{flex:1;height:6px;border-radius:4px;background:var(--rule-soft);overflow:hidden;min-width:80px;}
   .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--brass),var(--brass-glow));width:0;transition:width .2s;}
@@ -194,6 +202,7 @@
 <div class="wrap">
   <nav class="nav" aria-label="ページ切り替え">
     <a class="nav-i" href="./index.html" aria-current="page">巡礼コース</a>
+    <a class="nav-i" href="./mochimono.html">持ち物</a>
     <a class="nav-i" href="./seisan.html">精算</a>
   </nav>
 
@@ -267,9 +276,12 @@ let me = MEMBERS.includes(read(LS.me, null)) ? read(LS.me, null) : MEMBERS[0];
  * 種別を後から足したときに、保存済みの設定のせいで新種別が最初から
  * 隠れてしまうのを避けるため。旧形式（kinds）が残っていたら捨てる。
  */
-let ui = Object.assign({ hidden: [], undoneOnly: false }, read(LS.ui, {}));
+let ui = Object.assign({ hidden: [], show: 'all' }, read(LS.ui, {}));
 if (!Array.isArray(ui.hidden)) ui.hidden = [];
+if (ui.undoneOnly) ui.show = 'todo';          // 旧「未チェックのみ」からの引き継ぎ
+if (['all', 'todo', 'done'].indexOf(ui.show) < 0) ui.show = 'all';
 delete ui.kinds;
+delete ui.undoneOnly;
 
 const isChecked = (id, who) => Boolean(checks[id] && checks[id][who]);
 
@@ -540,7 +552,11 @@ function toolbarHtml() {
       </div>
       <div class="filters">
         ${Object.entries(KINDS).map(([k, v]) => `<button type="button" class="chip-btn" data-kind="${esc(k)}" aria-pressed="true">${esc(v.label)}</button>`).join('')}
-        <button type="button" class="chip-btn" data-undone aria-pressed="false">未チェックのみ</button>
+        <span class="seg" role="group" aria-label="表示するもの">
+          <button type="button" class="chip-btn" data-show="all">すべて</button>
+          <button type="button" class="chip-btn" data-show="todo">未訪問</button>
+          <button type="button" class="chip-btn" data-show="done">訪問済</button>
+        </span>
       </div>
     </div>
     <div class="total">
@@ -549,7 +565,7 @@ function toolbarHtml() {
       <b id="total-pct">0%</b>
       <span class="sync" id="sync"></span>
     </div>
-    <div class="jump">
+    <div class="jump" id="jump">
       ${TRIP.days.map((d) => {
         const dt = d.date.split('-');
         return `<a class="j${d.day}" href="#day${d.day}"><b>Day${d.day}</b><small>${Number(dt[1])}/${Number(dt[2])} ${DOW[d.dow]}　${esc(d.label.replace(/^.*?―\s*/, ''))}</small></a>`;
@@ -569,7 +585,7 @@ document.getElementById('h-meta').innerHTML = [
   TRIP.days[TRIP.days.length - 1].note ? `<span>最終日 <b>${esc(TRIP.days[TRIP.days.length - 1].note)}</b></span>` : '',
   `<span>宿 <b>${SPOTS.filter((s) => s.kind === 'stay').map((s) => (s.day === 1 ? '宇治' : '祇園')).join(' → ')}</b></span>`,
 ].filter(Boolean).join('');
-app.innerHTML = toolbarHtml() + TRIP.days.map(dayHtml).join('');
+app.innerHTML = toolbarHtml() + '<p class="empty" id="empty"></p>' + TRIP.days.map(dayHtml).join('');
 app.hidden = false;
 document.getElementById('boot').remove();
 
@@ -606,14 +622,34 @@ function renderProgress() {
 
 function applyFilters() {
   const hidden = new Set(ui.hidden);
+  let shown = 0;
   app.querySelectorAll('li.card').forEach((li) => {
-    const hide = hidden.has(li.dataset.kind) || (ui.undoneOnly && isChecked(li.dataset.id, me));
+    const on = isChecked(li.dataset.id, me);
+    const hide = hidden.has(li.dataset.kind) ||
+      (ui.show === 'todo' && on) || (ui.show === 'done' && !on);
     li.classList.toggle('hidden', hide);
+    if (!hide) shown++;
   });
   // カードも data-kind を持つので、必ず .chip-btn に限定する
   app.querySelectorAll('.chip-btn[data-kind]').forEach((b) => b.setAttribute('aria-pressed', String(!hidden.has(b.dataset.kind))));
-  app.querySelector('[data-undone]').setAttribute('aria-pressed', String(ui.undoneOnly));
+  app.querySelectorAll('[data-show]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.show === ui.show)));
   app.querySelectorAll('[data-me]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.me === me)));
+
+  // 0件のときに何も出ないと壊れて見えるので、理由を書く
+  const empty = document.getElementById('empty');
+  empty.classList.toggle('on', shown === 0);
+  empty.textContent = shown === 0
+    ? (ui.show === 'done' ? `${me} の訪問済みはまだありません。` :
+       ui.show === 'todo' ? `${me} の未訪問はありません。すべて回りました。` :
+       '表示できるものがありません。種別の絞り込みを見直してください。')
+    : '';
+
+  // 日の見出しも、その日が全部消えていれば隠す
+  TRIP.days.forEach((d) => {
+    const sec = document.getElementById('day' + d.day);
+    const any = sec.querySelectorAll('li.card:not(.hidden)').length;
+    sec.style.display = any ? '' : 'none';
+  });
 }
 
 function renderAll() {
@@ -647,7 +683,8 @@ app.addEventListener('change', (e) => {
   setCheck(li.dataset.id, me, box.checked);
   renderFoot(li);
   renderProgress();
-  if (ui.undoneOnly) applyFilters();
+  // 未訪問／訪問済で絞っているときは、押した瞬間に対象から外れる（または入る）
+  if (ui.show !== 'all') applyFilters();
 });
 
 app.addEventListener('click', (e) => {
@@ -663,8 +700,9 @@ app.addEventListener('click', (e) => {
     write(LS.ui, ui); applyFilters(); return;
   }
 
-  if (e.target.closest('[data-undone]')) {
-    ui.undoneOnly = !ui.undoneOnly; write(LS.ui, ui); applyFilters(); return;
+  const show = e.target.closest('[data-show]');
+  if (show) {
+    ui.show = show.dataset.show; write(LS.ui, ui); applyFilters(); return;
   }
 
   const reset = e.target.closest('[data-reset]');

@@ -39,7 +39,7 @@ export const TRIP = {
   days: [
     { day: 1, date: '2026-08-28', dow: 5, label: '第一楽章 ― 宇治を歩く一日',
       theme: '京都駅から宇治へ。聖地を歩きながら、通圓の茶そば・平等院・宇治茶スイーツも。',
-      note: '京都駅 8:24 着' },
+      note: '6:10 新横浜集合 → 京都駅 8:24 着' },
     { day: 2, date: '2026-08-29', dow: 6, label: '第二楽章 ― アクトパル・北区中華・東山',
       theme: '宇治からアクトパル→北大路の町中華→岡崎・東山。横移動の多い一日。',
       note: '' },
@@ -59,6 +59,13 @@ export const KINDS = {
 
 export const SPOTS = [
   // ===== Day 1 : 宇治 =====
+  {
+    id: 'd1-003', day: 1, order: 3, name: '集合 新横浜駅 新幹線改札前', time: '6:10', kind: 'move',
+    works: [], scene: '',
+    coords: null, q: '新横浜駅 新幹線 改札',
+    hours: null, closed: [], price: 0,
+    note: '6:10 集合。発車まで23分', warn: '',
+  },
   {
     id: 'd1-005', day: 1, order: 5, name: '新幹線 新横浜 → 京都', time: '6:33', kind: 'move',
     works: [], scene: '',
@@ -133,12 +140,12 @@ export const SPOTS = [
     note: '外観のみ。授業・部活の妨げにならないよう配慮', warn: '',
   },
   {
-    id: 'd1-080', day: 1, order: 80, name: '幸栄堂 本店', time: '', kind: 'food',
-    works: [], scene: '久美子があすか先輩宅へ持参した栗まんじゅう（香織先輩のおすすめ）',
-    coords: null, q: '幸栄堂 宇治',
-    hours: { open: '', close: '17:00', raw: '〜17:00' }, closed: [], price: 0,
-    note: '栗まんじゅうは三室戸店で買う',
-    warn: '休業中。買うなら三室戸店へ回ること',
+    id: 'd1-080', day: 1, order: 80, name: '幸栄堂 本店', time: '', kind: 'seichi',
+    works: [], scene: '久美子があすか先輩宅へ持参した栗まんじゅう（香織先輩のおすすめ）の店',
+    coords: null, q: '幸栄堂 本店 宇治市莵道東隼上り',
+    hours: { open: '09:00', close: '18:40', raw: '9:00-18:40' }, closed: [2], price: 0,
+    note: '莵道高校のあとに寄る。店頭販売はなく電話予約のみ（公式サイト）なので外観のみ。栗まんじゅうは三室戸店で。三室戸駅から729m（宇治市莵道東隼上り5-8）',
+    warn: '店頭では買えない（電話予約のみ）。買うなら三室戸店へ回ること',
   },
   {
     id: 'd1-085', day: 1, order: 85, name: '幸栄堂 三室戸店', time: '', kind: 'food',
