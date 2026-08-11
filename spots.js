@@ -39,7 +39,7 @@ export const TRIP = {
   days: [
     { day: 1, date: '2026-08-28', dow: 5, label: '第一楽章 ― 宇治を歩く一日',
       theme: '京都駅から宇治へ。聖地を歩きながら、通圓の茶そば・平等院・宇治茶スイーツも。',
-      note: '京都駅 9:00 着' },
+      note: '京都駅 8:24 着' },
     { day: 2, date: '2026-08-29', dow: 6, label: '第二楽章 ― アクトパル・北区中華・東山',
       theme: '宇治からアクトパル→北大路の町中華→岡崎・東山。横移動の多い一日。',
       note: '' },
@@ -53,23 +53,51 @@ export const KINDS = {
   seichi: { label: '聖地', shape: 'circle' },
   sight:  { label: '観光', shape: 'circle' },
   food:   { label: '飯',   shape: 'square' },
+  move:   { label: '移動', shape: 'circle' },
   stay:   { label: '宿',   shape: 'star'   },
 };
 
 export const SPOTS = [
   // ===== Day 1 : 宇治 =====
   {
-    id: 'd1-010', day: 1, order: 10, name: '京都駅', time: '9:00', kind: 'seichi',
+    id: 'd1-005', day: 1, order: 5, name: '新幹線 新横浜 → 京都', time: '6:33', kind: 'move',
+    works: [], scene: '',
+    coords: null, q: '新横浜駅',
+    hours: null, closed: [], price: 0,
+    note: '6:33 新横浜発 → 8:24 京都着', warn: '',
+  },
+  {
+    id: 'd1-010', day: 1, order: 10, name: '京都駅', time: '8:24', kind: 'seichi',
     works: ['2期7話'], scene: '駅ビル大階段「えきびるコンサート」の演奏舞台・客席',
     coords: null, q: '京都駅ビル 大階段',
     hours: null, closed: [], price: 0,
-    note: '京アニグッズストア京都駅店も同じ駅構内。※奈良線は六地蔵まで乗り間違い注意',
+    note: '京アニグッズストア京都駅店も同じ駅構内。ここから奈良線に乗る。※奈良線は六地蔵まで乗り間違い注意',
     warn: '',
+  },
+  {
+    id: 'd1-012', day: 1, order: 12, name: 'JR奈良線 六地蔵駅', time: '', kind: 'move',
+    works: [], scene: '',
+    coords: null, q: 'JR六地蔵駅',
+    hours: null, closed: [], price: 0,
+    note: '京アニ本社はスキップ', warn: '',
+  },
+  {
+    id: 'd1-014', day: 1, order: 14, name: '京阪宇治線 六地蔵駅', time: '', kind: 'move',
+    works: [], scene: '',
+    coords: null, q: '京阪六地蔵駅',
+    hours: null, closed: [], price: 0,
+    note: 'JRから徒歩で乗り換え。ここから京阪宇治線', warn: '',
   },
   {
     id: 'd1-020', day: 1, order: 20, name: '六地蔵', time: '', kind: 'seichi',
     works: ['1期'], scene: '通学で使う六地蔵駅のベンチ',
     coords: null, q: '六地蔵駅',
+    hours: null, closed: [], price: 0, note: '', warn: '',
+  },
+  {
+    id: 'd1-025', day: 1, order: 25, name: '京阪宇治線 黄檗駅', time: '', kind: 'move',
+    works: [], scene: '',
+    coords: null, q: '京阪黄檗駅',
     hours: null, closed: [], price: 0, note: '', warn: '',
   },
   {
@@ -105,11 +133,25 @@ export const SPOTS = [
     note: '外観のみ。授業・部活の妨げにならないよう配慮', warn: '',
   },
   {
-    id: 'd1-080', day: 1, order: 80, name: '幸栄堂', time: '', kind: 'food',
+    id: 'd1-080', day: 1, order: 80, name: '幸栄堂 本店', time: '', kind: 'food',
     works: [], scene: '久美子があすか先輩宅へ持参した栗まんじゅう（香織先輩のおすすめ）',
     coords: null, q: '幸栄堂 宇治',
     hours: { open: '', close: '17:00', raw: '〜17:00' }, closed: [], price: 0,
-    note: '', warn: '',
+    note: '栗まんじゅうは三室戸店で買う',
+    warn: '休業中。買うなら三室戸店へ回ること',
+  },
+  {
+    id: 'd1-085', day: 1, order: 85, name: '幸栄堂 三室戸店', time: '', kind: 'food',
+    works: [], scene: '',
+    coords: null, q: '幸栄堂 三室戸店 宇治市莵道田中',
+    hours: { open: '07:00', close: '18:30', raw: '7:00-18:30' }, closed: [2], price: 0,
+    note: '本店が休業中のためこちら。栗まんじゅう。京阪三室戸駅から131m（宇治市莵道田中6-26）', warn: '',
+  },
+  {
+    id: 'd1-088', day: 1, order: 88, name: '京阪宇治線 三室戸駅', time: '', kind: 'move',
+    works: [], scene: '',
+    coords: null, q: '京阪三室戸駅',
+    hours: null, closed: [], price: 0, note: '', warn: '',
   },
   {
     id: 'd1-090', day: 1, order: 90, name: '宇治駅', time: '', kind: 'seichi',
@@ -406,10 +448,11 @@ export const SPOTS = [
     hours: null, closed: [], price: 0, note: 'お土産', warn: '',
   },
   {
-    id: 'd3-120', day: 3, order: 120, name: '京都 発', time: '19:00', kind: 'sight',
+    id: 'd3-120', day: 3, order: 120, name: '京都 発（新幹線）', time: '19:00', kind: 'move',
     works: [], scene: '',
     coords: null, q: '京都駅',
-    hours: null, closed: [], price: 0, note: '', warn: '',
+    hours: null, closed: [], price: 0,
+    note: '★新幹線の便は未定', warn: '',
   },
 ];
 

@@ -17,7 +17,9 @@
     --alert:#A6402C; --done:#4E6A52;
   }
   *{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  /* スムーズスクロールにはしない。全スポットに地図が付くとページが2万px級になり、
+     Day3 へのジャンプが延々とスクロールし続けることになる */
+  html{-webkit-text-size-adjust:100%;}
   body{margin:0;background:var(--washi);color:var(--ink);
     font-family:"Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:820px;margin:0 auto;padding:0 18px 96px;}
@@ -66,13 +68,23 @@
   .meter{flex:1;height:6px;border-radius:4px;background:var(--rule-soft);overflow:hidden;min-width:80px;}
   .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--brass),var(--brass-glow));width:0;transition:width .2s;}
   .total b{font-family:"Barlow Condensed",sans-serif;font-size:.96rem;color:var(--brass-deep);letter-spacing:.04em;}
+  .jump{display:flex;gap:6px;margin-top:9px;}
+  .jump a{flex:1;text-align:center;text-decoration:none;border:1px solid var(--rule);
+    background:var(--washi-2);border-radius:8px;padding:5px 6px 6px;line-height:1.25;min-width:0;}
+  .jump a:hover,.jump a:focus-visible{border-color:var(--brass);background:rgba(181,135,46,.1);}
+  .jump b{display:block;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:.86rem;
+    letter-spacing:.06em;color:var(--brass-deep);}
+  .jump small{display:block;font-size:.66rem;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .jump a.j1 b{color:var(--tea);} .jump a.j3 b{color:var(--dusk);}
   .sync{flex:none;font-size:.72rem;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
   .sync.wait{color:var(--brass-deep);}
   .sync.ng{color:var(--alert);}
   .sync.ok{color:var(--done);}
 
   /* ---- day section ---- */
-  .mv{margin-top:38px;}
+  /* ツールバーが sticky なので、ジャンプ先が隠れないよう余白を取る。
+     --barh はツールバーの実測値をJSが入れる（狭い画面では折り返して高くなる） */
+  .mv{margin-top:38px;scroll-margin-top:var(--barh,150px);}
   .mv-head{display:flex;align-items:baseline;gap:14px;padding-bottom:10px;border-bottom:2px solid var(--brass);}
   .mv-no{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:2.4rem;line-height:.9;color:var(--brass);flex:none;}
   .mv-titles{flex:1;min-width:0;}
@@ -112,6 +124,7 @@
   .chip.k-food{color:var(--tea);background:rgba(78,106,82,.12);border-color:rgba(78,106,82,.3);}
   .chip.k-sight{color:var(--ink-soft);background:rgba(111,102,90,.1);border-color:rgba(111,102,90,.26);}
   .chip.k-stay{color:#fff;background:var(--dusk);border-color:var(--dusk);}
+  .chip.k-move{color:var(--dusk);background:rgba(60,60,99,.1);border-color:rgba(60,60,99,.28);}
   .chip.k-seichi{color:#fff;background:var(--brass);border-color:var(--brass);}
   .chip.survey{color:var(--alert);background:rgba(166,64,44,.1);border-color:rgba(166,64,44,.32);}
   .scene{font-size:.86rem;color:var(--ink);margin-top:2px;}
@@ -188,11 +201,7 @@
     <p class="kicker">聖地巡礼 行程表 ／ 巡礼チェックリスト</p>
     <h1 id="h-title">響け！ユーフォニアム<br><span class="ex" id="h-sub">京都・宇治をめぐる三楽章</span></h1>
     <p class="sub"><span class="dates" id="h-dates">2026.08.28 – 08.30</span>　／　2泊3日</p>
-    <div class="meta">
-      <span>初日 <b>京都駅 9:00 着</b></span>
-      <span>最終日 <b>京都駅 19:00 発</b></span>
-      <span>宿 <b>宇治 → 祇園</b></span>
-    </div>
+    <div class="meta" id="h-meta"></div>
   </header>
 
   <div id="boot">
@@ -253,7 +262,14 @@ const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } ca
 
 let checks = read(LS.checks, {});            // { spotId: { Yoshi: iso|null, Oka: iso|null } }
 let me = MEMBERS.includes(read(LS.me, null)) ? read(LS.me, null) : MEMBERS[0];
-let ui = Object.assign({ kinds: Object.keys(KINDS), undoneOnly: false }, read(LS.ui, {}));
+/**
+ * 表示設定。「隠している種別」を持つ（「表示する種別」ではない）。
+ * 種別を後から足したときに、保存済みの設定のせいで新種別が最初から
+ * 隠れてしまうのを避けるため。旧形式（kinds）が残っていたら捨てる。
+ */
+let ui = Object.assign({ hidden: [], undoneOnly: false }, read(LS.ui, {}));
+if (!Array.isArray(ui.hidden)) ui.hidden = [];
+delete ui.kinds;
 
 const isChecked = (id, who) => Boolean(checks[id] && checks[id][who]);
 
@@ -441,7 +457,8 @@ function dirUrl(leg, mode) {
 const SURVEY_RE = /★座標未確定[：:]?\s*/;
 const needsSurvey = (s) => !s.coords && SURVEY_RE.test(s.note || '');
 const cleanNote = (s) => (s.note || '').replace(SURVEY_RE, '');
-const countable = (s) => s.kind !== 'stay';   // 宿は進捗の分母から外す（Day1=26件）
+// 宿と移動（駅・新幹線）は進捗の分母から外す。訪問したかどうかを数える対象ではない
+const countable = (s) => s.kind !== 'stay' && s.kind !== 'move';
 
 /** spots.js の checkOpen / tightWindow / warn をまとめて1本の警告文にする */
 function warnsOf(s) {
@@ -482,7 +499,7 @@ function cardHtml(s, idx) {
       ${note ? `<div class="note">${esc(note)}</div>` : ''}
       ${warns.map((w) => `<div class="warn">${esc(w)}</div>`).join('')}
       ${facts ? `<div class="facts">${facts}</div>` : ''}
-      ${s.kind === 'seichi' ? `<figure class="shot"><div class="gmap" data-embed="${esc(embedUrl(s))}" data-title="${esc(s.name)}"></div></figure>` : ''}
+      <figure class="shot"><div class="gmap" data-embed="${esc(embedUrl(s))}" data-title="${esc(s.name)}"></div></figure>
       <div class="card-foot"></div>
     </div>
   </li>`;
@@ -532,6 +549,12 @@ function toolbarHtml() {
       <b id="total-pct">0%</b>
       <span class="sync" id="sync"></span>
     </div>
+    <div class="jump">
+      ${TRIP.days.map((d) => {
+        const dt = d.date.split('-');
+        return `<a class="j${d.day}" href="#day${d.day}"><b>Day${d.day}</b><small>${Number(dt[1])}/${Number(dt[2])} ${DOW[d.dow]}　${esc(d.label.replace(/^.*?―\s*/, ''))}</small></a>`;
+      }).join('')}
+    </div>
   </div>`;
 }
 
@@ -539,6 +562,13 @@ function toolbarHtml() {
 document.getElementById('h-title').innerHTML = `${esc(TRIP.title)}<br><span class="ex">${esc(TRIP.subtitle)}</span>`;
 document.getElementById('h-dates').textContent =
   `${TRIP.start.replace(/-/g, '.')} – ${TRIP.end.slice(5).replace('-', '.')}`;
+
+// 見出しの時刻は TRIP.days の note から作る（直書きすると spots.js と食い違う）
+document.getElementById('h-meta').innerHTML = [
+  TRIP.days[0].note ? `<span>初日 <b>${esc(TRIP.days[0].note)}</b></span>` : '',
+  TRIP.days[TRIP.days.length - 1].note ? `<span>最終日 <b>${esc(TRIP.days[TRIP.days.length - 1].note)}</b></span>` : '',
+  `<span>宿 <b>${SPOTS.filter((s) => s.kind === 'stay').map((s) => (s.day === 1 ? '宇治' : '祇園')).join(' → ')}</b></span>`,
+].filter(Boolean).join('');
 app.innerHTML = toolbarHtml() + TRIP.days.map(dayHtml).join('');
 app.hidden = false;
 document.getElementById('boot').remove();
@@ -575,12 +605,13 @@ function renderProgress() {
 }
 
 function applyFilters() {
-  const set = new Set(ui.kinds);
+  const hidden = new Set(ui.hidden);
   app.querySelectorAll('li.card').forEach((li) => {
-    const hide = !set.has(li.dataset.kind) || (ui.undoneOnly && isChecked(li.dataset.id, me));
+    const hide = hidden.has(li.dataset.kind) || (ui.undoneOnly && isChecked(li.dataset.id, me));
     li.classList.toggle('hidden', hide);
   });
-  app.querySelectorAll('[data-kind]').forEach((b) => b.setAttribute('aria-pressed', String(set.has(b.dataset.kind))));
+  // カードも data-kind を持つので、必ず .chip-btn に限定する
+  app.querySelectorAll('.chip-btn[data-kind]').forEach((b) => b.setAttribute('aria-pressed', String(!hidden.has(b.dataset.kind))));
   app.querySelector('[data-undone]').setAttribute('aria-pressed', String(ui.undoneOnly));
   app.querySelectorAll('[data-me]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.me === me)));
 }
@@ -591,6 +622,17 @@ function renderAll() {
   applyFilters();
 }
 renderAll();
+
+/* ---- ジャンプ先がツールバーに隠れないよう、実測値を CSS 変数に入れる ---- */
+function setBarHeight() {
+  const bar = app.querySelector('.bar');
+  if (bar) {
+    document.documentElement.style.setProperty(
+      '--barh', Math.round(bar.getBoundingClientRect().height + 12) + 'px');
+  }
+}
+setBarHeight();
+window.addEventListener('resize', setBarHeight);
 
 /* ---- 同期の開始。表示は先に出来上がっているので、ここで待たせない ---- */
 setSync(queue.length ? `未送信 ${queue.length}` : '', queue.length ? 'wait' : '');
@@ -612,10 +654,12 @@ app.addEventListener('click', (e) => {
   const who = e.target.closest('[data-me]');
   if (who) { me = who.dataset.me; write(LS.me, me); renderAll(); return; }
 
-  const kind = e.target.closest('[data-kind]');
+  // .chip-btn に限定する。カードにも data-kind があるため、限定しないと
+  // カード本文をタップしただけでその種別が丸ごと非表示になる
+  const kind = e.target.closest('.chip-btn[data-kind]');
   if (kind) {
     const k = kind.dataset.kind;
-    ui.kinds = ui.kinds.includes(k) ? ui.kinds.filter((x) => x !== k) : ui.kinds.concat(k);
+    ui.hidden = ui.hidden.includes(k) ? ui.hidden.filter((x) => x !== k) : ui.hidden.concat(k);
     write(LS.ui, ui); applyFilters(); return;
   }
 
