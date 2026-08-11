@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#3C3C63">
+<title>響け！ユーフォニアム 聖地巡礼 ｜ 京都・宇治 行程表</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --washi:#F6F1E6; --washi-2:#FBF8F0; --ink:#2A2622; --ink-soft:#6F665A;
+    --brass:#B5872E; --brass-deep:#8C641B; --brass-glow:#E4BC66;
+    --tea:#4E6A52; --dusk:#3C3C63; --rule:#E3D8C1; --rule-soft:#EDE5D4;
+    --alert:#A6402C; --done:#4E6A52;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{margin:0;background:var(--washi);color:var(--ink);
+    font-family:"Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 18px 96px;}
+
+  /* ---- 上部メニュー（ページ切り替え）---- */
+  .nav{margin:0 -18px;padding:0 18px;background:#23223B;display:flex;gap:2px;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav-i{position:relative;flex:none;text-decoration:none;padding:13px 16px 11px;
+    font-family:"Noto Sans JP",sans-serif;font-weight:700;font-size:.84rem;letter-spacing:.06em;
+    color:rgba(244,236,220,.62);white-space:nowrap;border-bottom:2px solid transparent;}
+  .nav-i:hover,.nav-i:focus-visible{color:#F4ECDC;}
+  .nav-i[aria-current="page"]{color:var(--brass-glow);border-bottom-color:var(--brass);}
+  .nav-i .soon{margin-left:6px;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:.62rem;
+    letter-spacing:.1em;text-transform:uppercase;color:rgba(244,236,220,.5);
+    border:1px solid rgba(244,236,220,.28);border-radius:3px;padding:0 4px;vertical-align:1px;}
+
+  /* ---- hero ---- */
+  .hero{position:relative;margin:0 -18px;padding:48px 24px 26px;
+    background:radial-gradient(120% 90% at 80% -10%, rgba(228,188,102,.30), transparent 55%),
+      linear-gradient(160deg,#23223B 0%,#3C3C63 42%,#7C4E47 78%,#B5872E 130%);
+    color:#F4ECDC;overflow:hidden;}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;
+    background:repeating-linear-gradient(to bottom,rgba(244,236,220,.28) 0,rgba(244,236,220,.28) 1px,transparent 1px,transparent 11px);opacity:.5;pointer-events:none;}
+  .kicker{font-family:"Barlow Condensed",sans-serif;letter-spacing:.42em;text-transform:uppercase;font-weight:600;font-size:.74rem;color:var(--brass-glow);margin:0 0 14px;}
+  .hero h1{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(1.8rem,6.4vw,2.8rem);line-height:1.2;margin:0;letter-spacing:.02em;}
+  .hero h1 .ex{color:var(--brass-glow);}
+  .hero .sub{margin:14px 0 0;font-size:.96rem;color:#E7DCC8;font-weight:500;}
+  .hero .dates{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:1.12rem;letter-spacing:.08em;color:#fff;}
+  .hero .meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.8rem;color:#EADFCB;position:relative;z-index:1;}
+  .hero .meta b{color:var(--brass-glow);font-weight:700;}
+
+  /* ---- toolbar ---- */
+  .bar{position:sticky;top:0;z-index:20;margin:0 -18px;padding:10px 18px 11px;
+    background:rgba(246,241,230,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);}
+  .bar-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .who{display:flex;gap:0;border:1px solid var(--brass);border-radius:20px;overflow:hidden;flex:none;}
+  .who button{appearance:none;border:none;background:transparent;font:inherit;font-size:.82rem;font-weight:700;
+    color:var(--brass-deep);padding:5px 15px;cursor:pointer;line-height:1.4;}
+  .who button[aria-pressed="true"]{background:var(--brass);color:#fff;}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;flex:1;min-width:0;}
+  .chip-btn{appearance:none;font:inherit;font-size:.76rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--rule);background:var(--washi-2);color:var(--ink-soft);border-radius:16px;padding:3px 11px;}
+  .chip-btn[aria-pressed="true"]{border-color:var(--brass);background:rgba(181,135,46,.14);color:var(--brass-deep);}
+  .total{display:flex;align-items:center;gap:9px;margin-top:9px;font-size:.78rem;color:var(--ink-soft);}
+  .meter{flex:1;height:6px;border-radius:4px;background:var(--rule-soft);overflow:hidden;min-width:80px;}
+  .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--brass),var(--brass-glow));width:0;transition:width .2s;}
+  .total b{font-family:"Barlow Condensed",sans-serif;font-size:.96rem;color:var(--brass-deep);letter-spacing:.04em;}
+  .sync{flex:none;font-size:.72rem;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
+  .sync.wait{color:var(--brass-deep);}
+  .sync.ng{color:var(--alert);}
+  .sync.ok{color:var(--done);}
+
+  /* ---- day section ---- */
+  .mv{margin-top:38px;}
+  .mv-head{display:flex;align-items:baseline;gap:14px;padding-bottom:10px;border-bottom:2px solid var(--brass);}
+  .mv-no{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:2.4rem;line-height:.9;color:var(--brass);flex:none;}
+  .mv-titles{flex:1;min-width:0;}
+  .mv-label{font-family:"Noto Serif JP",serif;font-weight:700;font-size:1.14rem;display:flex;align-items:center;gap:9px;}
+  .seal{width:11px;height:11px;border-radius:50%;flex:none;}
+  .mv1 .seal{background:var(--tea);} .mv2 .seal{background:var(--brass);} .mv3 .seal{background:var(--dusk);}
+  .mv-day{font-family:"Barlow Condensed",sans-serif;letter-spacing:.12em;font-weight:600;color:var(--ink-soft);font-size:.82rem;margin-top:3px;text-transform:uppercase;}
+  .mv-theme{font-size:.85rem;color:var(--ink-soft);margin-top:2px;}
+  .mv-prog{flex:none;text-align:right;font-family:"Barlow Condensed",sans-serif;font-weight:700;
+    font-size:1.05rem;color:var(--brass-deep);letter-spacing:.04em;white-space:nowrap;}
+  .mv-prog small{display:block;font-family:"Noto Sans JP",sans-serif;font-weight:500;font-size:.66rem;color:var(--ink-soft);letter-spacing:0;}
+
+  .routes{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 0;}
+  .route{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:.76rem;font-weight:600;
+    color:var(--dusk);background:rgba(60,60,99,.08);border:1px solid rgba(60,60,99,.22);border-radius:16px;padding:4px 11px;}
+  .route:hover{background:rgba(60,60,99,.15);}
+  .route .mode{font-size:.9rem;}
+
+  /* ---- card ---- */
+  ol.stops{list-style:none;margin:14px 0 0;padding:0;}
+  li.card{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--rule-soft);}
+  li.card:last-child{border-bottom:none;}
+  li.card.done{opacity:.62;}
+  li.card.hidden{display:none;}
+  .card-l{flex:none;width:56px;text-align:right;padding-top:2px;}
+  .no{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:.72rem;color:var(--rule);letter-spacing:.06em;display:block;}
+  .time{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:.86rem;color:var(--brass-deep);letter-spacing:.02em;display:block;}
+  .time.dot::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--rule);background:var(--washi);vertical-align:middle;}
+  .card-b{flex:1;min-width:0;}
+  .nm{font-weight:700;font-size:1.02rem;line-height:1.45;}
+  li.card.done .nm{text-decoration:line-through;text-decoration-color:var(--rule);}
+  .pin{text-decoration:none;margin-left:6px;font-size:.92rem;opacity:.72;white-space:nowrap;}
+  .pin:hover,.pin:focus{opacity:1;}
+  .chip{display:inline-block;margin-left:6px;vertical-align:middle;font-family:"Barlow Condensed",sans-serif;
+    font-weight:600;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;padding:1px 6px;
+    color:var(--brass-deep);background:rgba(181,135,46,.12);border:1px solid rgba(181,135,46,.3);}
+  .chip.k-food{color:var(--tea);background:rgba(78,106,82,.12);border-color:rgba(78,106,82,.3);}
+  .chip.k-sight{color:var(--ink-soft);background:rgba(111,102,90,.1);border-color:rgba(111,102,90,.26);}
+  .chip.k-stay{color:#fff;background:var(--dusk);border-color:var(--dusk);}
+  .chip.k-seichi{color:#fff;background:var(--brass);border-color:var(--brass);}
+  .chip.survey{color:var(--alert);background:rgba(166,64,44,.1);border-color:rgba(166,64,44,.32);}
+  .scene{font-size:.86rem;color:var(--ink);margin-top:2px;}
+  .note{font-size:.83rem;color:var(--ink-soft);margin-top:2px;}
+  .warn{font-size:.83rem;color:var(--alert);margin-top:3px;font-weight:500;}
+  .warn::before{content:"⚠ ";}
+  .facts{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:5px;font-size:.76rem;color:var(--ink-soft);
+    font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:.03em;}
+  .facts .yen{color:var(--ink);}
+  .shot{margin:9px 0 2px;max-width:360px;}
+  .gmap{position:relative;width:100%;aspect-ratio:16/10;border-radius:8px;overflow:hidden;border:1px solid var(--rule);background:rgba(181,135,46,.06);}
+  .gmap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .gmap::after{content:"地図";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:.74rem;}
+  .gmap.ready::after{display:none;}
+
+  .card-foot{display:flex;align-items:center;gap:10px;margin-top:9px;}
+  .check{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
+    border:1px solid var(--rule);background:var(--washi-2);border-radius:18px;padding:4px 13px 4px 9px;
+    font-size:.8rem;font-weight:700;color:var(--ink-soft);}
+  .check input{width:17px;height:17px;accent-color:var(--brass);margin:0;}
+  .check.on{border-color:var(--done);background:rgba(78,106,82,.1);color:var(--done);}
+  .mate{font-size:.74rem;color:var(--ink-soft);}
+  .mate b{color:var(--done);}
+  .stamp{font-family:"Barlow Condensed",sans-serif;font-size:.74rem;color:var(--ink-soft);letter-spacing:.04em;}
+  .dayfoot{margin-top:10px;text-align:right;}
+  .linkish{appearance:none;border:none;background:none;font:inherit;font-size:.74rem;color:var(--ink-soft);text-decoration:underline;cursor:pointer;padding:0;}
+
+  li.card.stay{margin-top:6px;background:var(--washi-2);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;}
+
+  /* ---- panels ---- */
+  .panel{margin-top:40px;background:var(--washi-2);border:1px solid var(--rule);border-radius:14px;padding:20px 20px 8px;}
+  .panel h2{font-family:"Noto Serif JP",serif;font-weight:700;font-size:1.08rem;margin:0 0 4px;display:flex;align-items:center;gap:9px;}
+  .panel h2::before{content:"";width:22px;height:2px;background:var(--brass);display:inline-block;}
+  .panel ul{margin:12px 0 0;padding:0;list-style:none;}
+  .panel li{position:relative;padding:0 0 14px 26px;font-size:.88rem;line-height:1.6;}
+  .panel li .ic{position:absolute;left:0;top:0;}
+  .panel li b{color:var(--brass-deep);}
+  .panel .none{font-size:.86rem;color:var(--ink-soft);padding-bottom:14px;}
+  table.bg{width:100%;border-collapse:collapse;margin-top:10px;font-size:.88rem;}
+  table.bg td{padding:8px 4px;border-bottom:1px solid var(--rule-soft);}
+  table.bg td:last-child{text-align:right;font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:1rem;white-space:nowrap;}
+  table.bg tr.tot td{border-bottom:none;border-top:2px solid var(--brass);font-weight:700;padding-top:11px;}
+  table.bg tr.tot td:last-child{color:var(--brass-deep);font-size:1.1rem;}
+  .cap{font-size:.76rem;color:var(--ink-soft);margin:8px 0 14px;}
+  footer{margin-top:34px;text-align:center;font-size:.76rem;color:var(--ink-soft);}
+  footer .staff{height:18px;margin:0 auto 14px;max-width:220px;background:repeating-linear-gradient(to bottom,var(--rule) 0,var(--rule) 1px,transparent 1px,transparent 5px);}
+
+  #boot{margin:28px 0;padding:16px 18px;border:1px solid var(--rule);border-radius:12px;background:var(--washi-2);font-size:.88rem;}
+  #boot code{font-family:"Barlow Condensed",monospace;background:rgba(181,135,46,.12);color:var(--brass-deep);padding:1px 5px;border-radius:3px;}
+
+  @media (max-width:430px){
+    .card-l{width:46px;}
+    li.card{gap:9px;}
+    .mv-no{font-size:1.9rem;}
+    .shot{max-width:none;}
+  }
+  @media print{
+    .nav,.bar,.gmap,.routes,.dayfoot{display:none;}
+    body{background:#fff;font-size:12px;}
+    .hero{background:#2A2640!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .mv{break-inside:avoid;}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav" aria-label="ページ切り替え">
+    <a class="nav-i" href="./index.html" aria-current="page">巡礼コース</a>
+    <a class="nav-i" href="./seisan.html">精算</a>
+  </nav>
+
+  <header class="hero">
+    <p class="kicker">聖地巡礼 行程表 ／ 巡礼チェックリスト</p>
+    <h1 id="h-title">響け！ユーフォニアム<br><span class="ex" id="h-sub">京都・宇治をめぐる三楽章</span></h1>
+    <p class="sub"><span class="dates" id="h-dates">2026.08.28 – 08.30</span>　／　2泊3日</p>
+    <div class="meta">
+      <span>初日 <b>京都駅 9:00 着</b></span>
+      <span>最終日 <b>京都駅 19:00 発</b></span>
+      <span>宿 <b>宇治 → 祇園</b></span>
+    </div>
+  </header>
+
+  <div id="boot">
+    <b>読み込み中…</b><br>
+    このまま表示が変わらない場合は、<code>file://</code> で開いているため
+    <code>spots.js</code> のモジュール読み込みがブラウザに拒否されています。
+    フォルダ内で <code>python -m http.server 8000</code> を実行し、
+    <code>http://localhost:8000/</code> を開いてください（GitHub Pages 上では問題ありません）。
+  </div>
+
+  <main id="app" hidden></main>
+
+  <section class="panel" id="warnings" hidden>
+    <h2>営業時間・定休日の警告</h2>
+    <ul id="warn-list"></ul>
+  </section>
+
+  <section class="panel" id="survey" hidden>
+    <h2>座標未確定（現地で確認して spots.js を更新する）</h2>
+    <ul id="survey-list"></ul>
+  </section>
+
+  <section class="panel" id="budget" hidden>
+    <h2>概算費用（spots.js の price 合計・一人）</h2>
+    <table class="bg" id="budget-table"></table>
+    <p class="cap">※ price が 0 のスポット（多くの飲食・拝観料）と市内交通・往復交通費は含みません。</p>
+  </section>
+
+  <footer>
+    <div class="staff"></div>
+    <p>響け！ユーフォニアム 聖地巡礼 ／ 京都・宇治 2泊3日 ・ 2026.8.28–30</p>
+    <p id="foot-note"></p>
+  </footer>
+</div>
+
+<script type="module">
+import { TRIP, KINDS, SPOTS, byDay, checkOpen, tightWindow } from './spots.js';
+
+/* ============================================================
+   状態：チェックは最初から member 別に持つ。
+   3（Apps Script 同期）のシートが spotId / member / checkedAt なので、
+   保存形式を最初から合わせておき、送信部だけ後から差し込む。
+   ============================================================ */
+const LS = { checks: 'kyoto2026.checks', me: 'kyoto2026.me', ui: 'kyoto2026.ui', queue: 'kyoto2026.queue' };
+
+// 沖縄版と同じウェブアプリURL・同じ TOKEN（新規デプロイはしない）
+var API_URL = "https://script.google.com/macros/s/AKfycbxoPCHPlRPAf5NAQ9E1nqMKMj0UXoQkZJrwQQ6KPglmDgtoKmFNLgv7Vt34iVjYrJGG/exec";
+var TOKEN = "okinawa2026-3nin-2f9a41c7";
+var TRIP_ID = "kyoto";
+var MAX_CHECKS = 120;   // apps-script.gs 側と同じ値
+const MEMBERS = TRIP.members;               // ['Yoshi', 'Oka']
+const DOW = ['日', '月', '火', '水', '木', '金', '土'];
+const ROMAN = ['', 'I', 'II', 'III', 'IV'];
+const MAX_LEG = 11;                         // origin + waypoints9 + destination
+
+const read = (k, fb) => { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch { return fb; } };
+const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } };
+
+let checks = read(LS.checks, {});            // { spotId: { Yoshi: iso|null, Oka: iso|null } }
+let me = MEMBERS.includes(read(LS.me, null)) ? read(LS.me, null) : MEMBERS[0];
+let ui = Object.assign({ kinds: Object.keys(KINDS), undoneOnly: false }, read(LS.ui, {}));
+
+const isChecked = (id, who) => Boolean(checks[id] && checks[id][who]);
+
+/**
+ * チェックの唯一の書き込み口。
+ * 必ずローカル優先。宇治は徒歩移動で圏外になる場所があるので、
+ * localStorage に即書き→UI即反映まで済ませてから、裏で送る。
+ */
+function setCheck(id, who, on) {
+  const row = checks[id] || (checks[id] = {});
+  row[who] = on ? new Date().toISOString() : null;
+  write(LS.checks, checks);
+  enqueueSync({ spotId: id, member: who, checkedAt: row[who] });
+}
+
+/* ============================================================
+   同期（localStorage の未送信キュー → Apps Script）
+   送信できなくても操作は止めない。キューは online イベントと
+   次回起動時に flush する。check_set は (spotId, member) で
+   上書きされるので、二重送信しても行は増えない。
+   ============================================================ */
+let queue = read(LS.queue, []);
+let flushing = false;
+let syncState = '';
+
+function setSync(text, cls) {
+  syncState = text;
+  const el = document.getElementById('sync');
+  if (el) { el.className = 'sync ' + (cls || ''); el.textContent = text; }
+}
+
+/** 沖縄版 wishlist.html と同じ経路。text/plain にして preflight を避ける */
+function post(obj) {
+  obj.token = TOKEN;
+  obj.trip = TRIP_ID;
+  const payload = JSON.stringify(obj);
+  const opts = { method: 'POST', body: payload, headers: { 'Content-Type': 'text/plain;charset=utf-8' } };
+  return fetch(API_URL, opts)
+    .then((r) => r.json())
+    .then((j) => {
+      if (!j || !j.ok) {
+        // サーバーが理由を付けて断った場合。設定ミスや未反映がここに出る
+        const e = new Error(j && j.error ? j.error : '拒否されました');
+        e.rejected = true;
+        throw e;
+      }
+      return j;
+    })
+    .catch((err) => {
+      // 断られたことがはっきりしているものは保険を使わない。
+      // 使うと unknown action / token 違いまで「送信済」になってしまう
+      if (err && err.rejected) throw err;
+      // ここに来るのは通信できない・応答を読めない場合。送信自体は届くので
+      // 届いたものとして扱い、取りこぼしは次回起動時の照合で送り直す
+      return fetch(API_URL, { method: 'POST', mode: 'no-cors', body: payload,
+                              headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
+        .then(() => ({ ok: true, unverified: true }))
+        .catch(() => { throw err; });
+    });
+}
+
+/** 読み取りは JSONP。fetch だとリダイレクト先で CORS に引っかかる */
+function jsonp(url, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const name = 'kycb_' + Math.random().toString(36).slice(2);
+    const s = document.createElement('script');
+    const timer = setTimeout(() => { done(); reject(new Error('時間内に応答がありません')); }, timeoutMs || 15000);
+    function done() {
+      clearTimeout(timer);
+      try { delete window[name]; } catch { window[name] = undefined; }
+      if (s.parentNode) s.parentNode.removeChild(s);
+    }
+    window[name] = (data) => { done(); resolve(data); };
+    s.onerror = () => { done(); reject(new Error('接続できません')); };
+    s.src = url + (url.indexOf('?') < 0 ? '?' : '&') + 'callback=' + name;
+    document.head.appendChild(s);
+  });
+}
+
+function enqueueSync(payload) {
+  queue.push(payload);
+  write(LS.queue, queue);
+  flushQueue();
+}
+
+/** 同じ (spotId, member) は最後の状態だけ残す */
+function collapse(items) {
+  const last = new Map();
+  items.forEach((it) => last.set(it.spotId + '\t' + it.member, it));
+  return Array.from(last.values());
+}
+
+function flushQueue() {
+  if (flushing || !queue.length) { if (!queue.length) setSync('同期済み', 'ok'); return Promise.resolve(); }
+  if (!navigator.onLine) { setSync(`未送信 ${queue.length}（圏外）`, 'wait'); return Promise.resolve(); }
+
+  flushing = true;
+  const items = collapse(queue).slice(0, MAX_CHECKS);
+  const n = queue.length;
+  setSync('送信中…', 'wait');
+  return post({ action: 'check_set', items })
+    .then((j) => {
+      // 送信中に押されたぶんは残す
+      queue = queue.slice(n);
+      write(LS.queue, queue);
+      setSync(queue.length ? `未送信 ${queue.length}` : (j.unverified ? '送信済（未確認）' : '同期済み'),
+              queue.length ? 'wait' : 'ok');
+    })
+    .catch((err) => setSync(`未送信 ${queue.length}（${err && err.message ? err.message : 'あとで再送'}）`, 'ng'))
+    .finally(() => {
+      flushing = false;
+      if (queue.length && navigator.onLine) setTimeout(flushQueue, 4000);
+    });
+}
+
+/**
+ * シートと照合する。起動時に1回だけ。
+ *   相手のぶん … シートを正とする（相手の端末しか知らないので）
+ *   自分のぶん … この端末を正とし、シートに無いものは送り直す
+ * これで POST の取りこぼしが次回起動時に自然に直る。
+ */
+function pullChecks() {
+  setSync('照合中…', 'wait');
+  return jsonp(API_URL + '?what=checks&trip=' + TRIP_ID)
+    .then((j) => {
+      if (!j || !j.ok) throw new Error(j && j.error ? j.error : '読めません');
+      // 見出しを確かめる。スクリプトが未反映だと what=checks の分岐が無く、
+      // 沖縄の希望リストが ok:true で返ってくる。それを「チェック0件」と
+      // 解釈すると、相手のチェックをローカルから消してしまう。
+      const head = (j.rows && j.rows[0] ? j.rows[0] : []).map((v) => String(v == null ? '' : v).trim());
+      if (head[0] !== 'spotId' || head[1] !== 'member') {
+        throw new Error('同期先が未反映です（Apps Script を新バージョンで反映してください）');
+      }
+      const remote = {};
+      (j.rows || []).slice(1).forEach((r) => {
+        const id = String(r[0] == null ? '' : r[0]).trim();
+        const m = String(r[1] == null ? '' : r[1]).trim();
+        const at = String(r[2] == null ? '' : r[2]).trim();
+        if (!id || MEMBERS.indexOf(m) < 0 || !at) return;
+        (remote[id] || (remote[id] = {}))[m] = at;
+      });
+
+      const mates = MEMBERS.filter((m) => m !== me);
+      const repair = [];
+      SPOTS.forEach((s) => {
+        const row = checks[s.id] || (checks[s.id] = {});
+        mates.forEach((m) => { row[m] = (remote[s.id] && remote[s.id][m]) || null; });
+        const mine = row[me] || null;
+        const there = (remote[s.id] && remote[s.id][me]) || null;
+        if (mine && !there) repair.push({ spotId: s.id, member: me, checkedAt: mine });
+        if (!mine && there) repair.push({ spotId: s.id, member: me, checkedAt: null });
+      });
+      write(LS.checks, checks);
+      renderAll();
+
+      if (repair.length) { queue = queue.concat(repair); write(LS.queue, queue); }
+      return flushQueue();
+    })
+    .catch((err) => setSync((err && err.message) || 'シートに接続できません', 'ng'));
+}
+
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
+  (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ---- 地図・リンク --------------------------------------------------- */
+const target = (s) => (s.coords ? `${s.coords[0]},${s.coords[1]}` : s.q || s.name);
+const pinUrl = (s) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(target(s));
+const embedUrl = (s) => 'https://www.google.com/maps?q=' + encodeURIComponent(target(s)) + '&hl=ja&z=16&output=embed';
+
+/** 1日分を MAX_LEG 地点ずつの区間に割る。区間は1件重ねて連結する。 */
+function legs(spots) {
+  if (spots.length <= MAX_LEG) return [spots];
+  const out = [];
+  for (let i = 0; i < spots.length - 1; i += MAX_LEG - 1) out.push(spots.slice(i, i + MAX_LEG));
+  return out;
+}
+function dirUrl(leg, mode) {
+  const pts = leg.map(target);
+  const u = new URLSearchParams({ api: '1', origin: pts[0], destination: pts[pts.length - 1], travelmode: mode });
+  if (pts.length > 2) u.set('waypoints', pts.slice(1, -1).join('|'));
+  return 'https://www.google.com/maps/dir/?' + u.toString();
+}
+
+/* ---- スポットのメタ ------------------------------------------------- */
+const SURVEY_RE = /★座標未確定[：:]?\s*/;
+const needsSurvey = (s) => !s.coords && SURVEY_RE.test(s.note || '');
+const cleanNote = (s) => (s.note || '').replace(SURVEY_RE, '');
+const countable = (s) => s.kind !== 'stay';   // 宿は進捗の分母から外す（Day1=26件）
+
+/** spots.js の checkOpen / tightWindow / warn をまとめて1本の警告文にする */
+function warnsOf(s) {
+  const list = [];
+  const open = checkOpen(s);
+  if (!open.ok) list.push(`${open.reason}：訪問日（${DOW[TRIP.days.find((d) => d.day === s.day).dow]}）に閉まっている`);
+  const tight = tightWindow(s, 120);
+  if (tight) list.push(`営業枠が ${tight.raw}（${tight.window}分）しかない`);
+  if (s.warn) list.push(s.warn);
+  return list;
+}
+
+/* ---- 描画 ----------------------------------------------------------- */
+const app = document.getElementById('app');
+
+function cardHtml(s, idx) {
+  const kind = KINDS[s.kind] || { label: s.kind };
+  const chips = [`<span class="chip k-${esc(s.kind)}">${esc(kind.label)}</span>`]
+    .concat((s.works || []).map((w) => `<span class="chip">${esc(w)}</span>`))
+    .concat(needsSurvey(s) ? ['<span class="chip survey">座標未確定</span>'] : [])
+    .join('');
+  const facts = []
+    .concat(s.hours && s.hours.raw ? [`<span>🕘 ${esc(s.hours.raw)}</span>`] : [])
+    .concat(s.closed && s.closed.length ? [`<span>休 ${s.closed.map((d) => DOW[d]).join('・')}</span>`] : [])
+    .concat(s.price ? [`<span class="yen">¥${s.price.toLocaleString('ja-JP')}</span>`] : [])
+    .join('');
+  const note = cleanNote(s);
+  const warns = warnsOf(s);
+
+  return `<li class="card ${s.kind === 'stay' ? 'stay' : ''}" data-id="${esc(s.id)}" data-kind="${esc(s.kind)}">
+    <div class="card-l">
+      <span class="no">${String(idx + 1).padStart(2, '0')}</span>
+      <span class="time ${s.time ? '' : 'dot'}">${esc(s.time)}</span>
+    </div>
+    <div class="card-b">
+      <div class="nm">${esc(s.name)}${chips}<a class="pin" href="${pinUrl(s)}" target="_blank" rel="noopener" aria-label="Googleマップで開く">📍</a></div>
+      ${s.scene ? `<div class="scene">${esc(s.scene)}</div>` : ''}
+      ${note ? `<div class="note">${esc(note)}</div>` : ''}
+      ${warns.map((w) => `<div class="warn">${esc(w)}</div>`).join('')}
+      ${facts ? `<div class="facts">${facts}</div>` : ''}
+      ${s.kind === 'seichi' ? `<figure class="shot"><div class="gmap" data-embed="${esc(embedUrl(s))}" data-title="${esc(s.name)}"></div></figure>` : ''}
+      <div class="card-foot"></div>
+    </div>
+  </li>`;
+}
+
+function dayHtml(d) {
+  const spots = byDay(d.day);
+  const dt = d.date.split('-');
+  const modes = d.day === 2 ? [['transit', '🚃'], ['walking', '🚶']] : [['walking', '🚶'], ['transit', '🚃']];
+  const routes = legs(spots).map((leg, i, all) => {
+    const label = all.length > 1 ? `区間${i + 1}　${leg[0].name} → ${leg[leg.length - 1].name}` : `${leg[0].name} → ${leg[leg.length - 1].name}`;
+    return modes.map((m, j) =>
+      `<a class="route" href="${dirUrl(leg, m[0])}" target="_blank" rel="noopener"><span class="mode">${m[1]}</span>${j === 0 ? esc(label) : ''}</a>`
+    ).join('');
+  }).join('');
+
+  return `<section class="mv mv${d.day}" id="day${d.day}">
+    <div class="mv-head">
+      <div class="mv-no">${ROMAN[d.day]}</div>
+      <div class="mv-titles">
+        <div class="mv-label"><span class="seal"></span>${esc(d.label)}</div>
+        <div class="mv-day">${DOW[d.dow]} ${Number(dt[1])} / ${Number(dt[2])}${d.note ? ' ・ ' + esc(d.note) : ''}</div>
+        <div class="mv-theme">${esc(d.theme)}</div>
+      </div>
+      <div class="mv-prog" data-prog="${d.day}">–<small>進捗</small></div>
+    </div>
+    <div class="routes">${routes}</div>
+    <ol class="stops">${spots.map(cardHtml).join('')}</ol>
+    <div class="dayfoot"><button class="linkish" data-reset="${d.day}">この日のチェックを解除</button></div>
+  </section>`;
+}
+
+function toolbarHtml() {
+  return `<div class="bar">
+    <div class="bar-row">
+      <div class="who" role="group" aria-label="記録する人">
+        ${MEMBERS.map((m) => `<button type="button" data-me="${esc(m)}" aria-pressed="false">${esc(m)}</button>`).join('')}
+      </div>
+      <div class="filters">
+        ${Object.entries(KINDS).map(([k, v]) => `<button type="button" class="chip-btn" data-kind="${esc(k)}" aria-pressed="true">${esc(v.label)}</button>`).join('')}
+        <button type="button" class="chip-btn" data-undone aria-pressed="false">未チェックのみ</button>
+      </div>
+    </div>
+    <div class="total">
+      <span id="total-label">–</span>
+      <span class="meter"><i id="total-bar"></i></span>
+      <b id="total-pct">0%</b>
+      <span class="sync" id="sync"></span>
+    </div>
+  </div>`;
+}
+
+/* ---- 初期描画 -------------------------------------------------------- */
+document.getElementById('h-title').innerHTML = `${esc(TRIP.title)}<br><span class="ex">${esc(TRIP.subtitle)}</span>`;
+document.getElementById('h-dates').textContent =
+  `${TRIP.start.replace(/-/g, '.')} – ${TRIP.end.slice(5).replace('-', '.')}`;
+app.innerHTML = toolbarHtml() + TRIP.days.map(dayHtml).join('');
+app.hidden = false;
+document.getElementById('boot').remove();
+
+/* ---- card-foot（チェック UI）---------------------------------------- */
+function renderFoot(li) {
+  const id = li.dataset.id;
+  const mine = isChecked(id, me);
+  const others = MEMBERS.filter((m) => m !== me);
+  const stamp = mine ? new Date(checks[id][me]).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+  li.querySelector('.card-foot').innerHTML =
+    `<label class="check ${mine ? 'on' : ''}">
+       <input type="checkbox" ${mine ? 'checked' : ''} aria-label="${esc(li.querySelector('.nm').textContent.trim())} を訪問済みにする">
+       <span>${mine ? '訪問済' : '未訪問'}</span>
+     </label>
+     ${stamp ? `<span class="stamp">${esc(stamp)}</span>` : ''}
+     <span class="mate">${others.map((m) => (isChecked(id, m) ? `<b>${esc(m)} ✓</b>` : `${esc(m)} –`)).join('　')}</span>`;
+  li.classList.toggle('done', mine);
+}
+
+function renderProgress() {
+  let all = 0, hit = 0;
+  TRIP.days.forEach((d) => {
+    const spots = byDay(d.day).filter(countable);
+    const n = spots.filter((s) => isChecked(s.id, me)).length;
+    all += spots.length; hit += n;
+    const el = app.querySelector(`[data-prog="${d.day}"]`);
+    el.innerHTML = `${n}/${spots.length}<small>${esc(me)}</small>`;
+  });
+  const pct = all ? Math.round((hit / all) * 100) : 0;
+  document.getElementById('total-label').textContent = `${me} の巡礼　${hit} / ${all}`;
+  document.getElementById('total-bar').style.width = pct + '%';
+  document.getElementById('total-pct').textContent = pct + '%';
+}
+
+function applyFilters() {
+  const set = new Set(ui.kinds);
+  app.querySelectorAll('li.card').forEach((li) => {
+    const hide = !set.has(li.dataset.kind) || (ui.undoneOnly && isChecked(li.dataset.id, me));
+    li.classList.toggle('hidden', hide);
+  });
+  app.querySelectorAll('[data-kind]').forEach((b) => b.setAttribute('aria-pressed', String(set.has(b.dataset.kind))));
+  app.querySelector('[data-undone]').setAttribute('aria-pressed', String(ui.undoneOnly));
+  app.querySelectorAll('[data-me]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.me === me)));
+}
+
+function renderAll() {
+  app.querySelectorAll('li.card').forEach(renderFoot);
+  renderProgress();
+  applyFilters();
+}
+renderAll();
+
+/* ---- 同期の開始。表示は先に出来上がっているので、ここで待たせない ---- */
+setSync(queue.length ? `未送信 ${queue.length}` : '', queue.length ? 'wait' : '');
+window.addEventListener('online', flushQueue);
+pullChecks();
+
+/* ---- イベント ------------------------------------------------------- */
+app.addEventListener('change', (e) => {
+  const box = e.target.closest('.check input');
+  if (!box) return;
+  const li = box.closest('li.card');
+  setCheck(li.dataset.id, me, box.checked);
+  renderFoot(li);
+  renderProgress();
+  if (ui.undoneOnly) applyFilters();
+});
+
+app.addEventListener('click', (e) => {
+  const who = e.target.closest('[data-me]');
+  if (who) { me = who.dataset.me; write(LS.me, me); renderAll(); return; }
+
+  const kind = e.target.closest('[data-kind]');
+  if (kind) {
+    const k = kind.dataset.kind;
+    ui.kinds = ui.kinds.includes(k) ? ui.kinds.filter((x) => x !== k) : ui.kinds.concat(k);
+    write(LS.ui, ui); applyFilters(); return;
+  }
+
+  if (e.target.closest('[data-undone]')) {
+    ui.undoneOnly = !ui.undoneOnly; write(LS.ui, ui); applyFilters(); return;
+  }
+
+  const reset = e.target.closest('[data-reset]');
+  if (reset) {
+    const day = Number(reset.dataset.reset);
+    if (!confirm(`Day${day} の ${me} のチェックをすべて解除します。よろしいですか？`)) return;
+    byDay(day).forEach((s) => { if (isChecked(s.id, me)) setCheck(s.id, me, false); });
+    renderAll();
+  }
+});
+
+/* ---- 地図は見えたものだけ読む（seichi でも20件超えるので）---------- */
+const io = new IntersectionObserver((rows) => {
+  rows.forEach((r) => {
+    if (!r.isIntersecting) return;
+    const el = r.target;
+    io.unobserve(el);
+    const f = document.createElement('iframe');
+    f.src = el.dataset.embed;
+    f.loading = 'lazy';
+    f.title = el.dataset.title + ' の地図';
+    f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.addEventListener('load', () => el.classList.add('ready'));
+    el.appendChild(f);
+  });
+}, { rootMargin: '400px 0px' });
+app.querySelectorAll('.gmap[data-embed]').forEach((el) => io.observe(el));
+
+/* ---- 警告 / 座標未確定 / 概算費用 ---------------------------------- */
+const warnRows = SPOTS.map((s) => ({ s, w: warnsOf(s) })).filter((r) => r.w.length);
+if (warnRows.length) {
+  document.getElementById('warn-list').innerHTML = warnRows.map(({ s, w }) =>
+    `<li><span class="ic">${checkOpen(s).ok ? '🕘' : '🚫'}</span><b>Day${s.day}　${esc(s.name)}</b><br>${w.map(esc).join('<br>')}</li>`
+  ).join('');
+  document.getElementById('warnings').hidden = false;
+}
+
+const surveyRows = SPOTS.filter(needsSurvey);
+if (surveyRows.length) {
+  document.getElementById('survey-list').innerHTML = surveyRows.map((s) =>
+    `<li><span class="ic">📐</span><b>${esc(s.id)}　${esc(s.name)}</b><br>${esc(cleanNote(s))}</li>`
+  ).join('');
+  document.getElementById('survey').hidden = false;
+}
+
+const paid = SPOTS.filter((s) => s.price > 0);
+if (paid.length) {
+  const sum = paid.reduce((a, s) => a + s.price, 0);
+  document.getElementById('budget-table').innerHTML =
+    paid.map((s) => `<tr><td>Day${s.day}　${esc(s.name)}</td><td>¥${s.price.toLocaleString('ja-JP')}</td></tr>`).join('') +
+    `<tr class="tot"><td>小計</td><td>¥${sum.toLocaleString('ja-JP')}〜</td></tr>`;
+  document.getElementById('budget').hidden = false;
+}
+
+document.getElementById('foot-note').textContent =
+  `全 ${SPOTS.length} スポット（進捗の対象 ${SPOTS.filter(countable).length}／宿を除く）・座標未確定 ${surveyRows.length} 件`;
+</script>
+</body>
+</html>

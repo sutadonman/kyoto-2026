@@ -1,0 +1,2 @@
+# マイマップ取り込み用CSVは Excel で開く前提。BOM付き・CRLF を崩さない
+kyoto-spots.csv text eol=crlf
